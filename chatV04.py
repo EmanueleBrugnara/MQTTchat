@@ -4,6 +4,7 @@ import os
 import paho.mqtt.client as mqtt
 
 msg = ''
+key = 'abcdefghijklmnopqrstuvwxyz'
 
 #---------------------------MQTT DATA-------------------------------------------
 MQTTusr = "hgvybxzp"
@@ -54,6 +55,8 @@ class Console(object):
         self.clear()
         self.header(usr)
 
+
+
     def header(self, User):
         self.clear()
         print('¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯ ¯')
@@ -84,7 +87,33 @@ def on_message( client, userdata, msg):
     # print the message received from the subscribed topic
     sys.stdout.write(u"\u001b[1000D")   #Delate the line and return at starting position
     newMsg = str(msg.payload)
-    print ( newMsg.replace("b","",1) )
+    newMsg = caesarDeCry(newMsg,(len(newMsg)-3))
+    newMsg[5:]
+    print(newMsg) #prova a sostituire la prima lettera
+
+def caesarCry(plaintext, shift):
+    result = ''
+
+    for l in plaintext.lower():
+        try:
+            i = (key.index(l) + shift) % 26
+            result += key[i]
+        except ValueError:
+            result += l
+
+    return result.lower()
+
+def caesarDeCry(ciphertext, shift):
+    result = ''
+
+    for l in ciphertext:
+        try:
+            i = (key.index(l) - shift) % 26
+            result += key[i]
+        except ValueError:
+            result += l
+
+    return result
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -103,7 +132,9 @@ while True:
         cons.menu(usr, client)
     else:
         pack = usr.nick + ": " + msg
+        pack = caesarCry(pack,len(pack))
         cons.clearLine()
+
         client.publish(usr.topic,pack)
 
 
