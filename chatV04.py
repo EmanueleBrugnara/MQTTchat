@@ -6,12 +6,12 @@ import paho.mqtt.client as mqtt
 msg = ''
 key = 'abcdefghijklmnopqrstuvwxyz'
 
-#---------------------------MQTT DATA-------------------------------------------
+#---------------------------MQTT DATA--------------------------------------------
 MQTTusr = "hgvybxzp"
 MQTTpsw = "xH06RYvLNNTF"
 MQTTadr = "m14.cloudmqtt.com"
 MQTTport = 11754
-#-------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 
 class User(object):
     """docstring for user."""
